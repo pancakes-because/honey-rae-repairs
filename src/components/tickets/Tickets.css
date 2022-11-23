@@ -1,0 +1,18 @@
+/* styles for TicketList.js */ 
+
+/* styles for the tickets container, which is the tickets class */ 
+
+.tickets {
+    display: flex; 
+    flex-direction: column; 
+}
+ 
+/* styles for the individual ticket objects, which is under the ticket class */ 
+
+.ticket {
+
+    background-color: rgb(243, 230, 255); 
+    border: 1px dotted darkmagenta; 
+    padding: 0.7rem; 
+    margin: 0.5rem 0; 
+}
