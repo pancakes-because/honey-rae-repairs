@@ -14,6 +14,7 @@
 // since the useState function performs the first change in state, you can observe that.
 
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom" // importing from react-router-dom, so navigate feature works for customer "create ticket" button
 import "./Tickets.css" // importing from Tickets.css so we can apply the styles to TicketList.css 
 
 /* updated code */ 
@@ -26,6 +27,12 @@ export const TicketList = () => {
     // "setEmergency" is the variable that changes the state, so only emergency tickets are shown when the "emergency only" button is clicked
     // by default, we don't want only the emergency tickets to show, so the default or initial state of emergency is "false"
     const [emergency, setEmergency] = useState(false)
+
+    // navigate is a variable/"feature" tied to the "create ticket" button 
+    // it is imported from react-router-dom; see import statement near top 
+    // ***it is needed for the navigation ability to happen***
+    // it helps route customers to our ticket form after clicking the "create ticket" button
+    const navigate = useNavigate()
 
     const localHoneyUser = localStorage.getItem("honey_user") 
     const honeyUserObject = JSON.parse(localHoneyUser)
@@ -191,6 +198,12 @@ export const TicketList = () => {
 // so to see all tickets when the "show all" button is cilcked, we can set the state as "setEmergency(false)" 
 // since we now have two button components, we need to put all of the button code in its own fragment; react rule 
 
+// above the list of tickes, we're making a  "create ticket" button that ONLY customers can see 
+// when the customer clicks it, the navigate feature from react-router-dom will route them to a new route in the browser
+// when the customer clicks it, we are changing the route to "/ticket/create" 
+// this will be a new page with a form that creates a ticket in the ticket list view; the form input fields are in "TicketForm.js"
+// after they fill out the form, they will be routed back to the ticket list to see the new ticket they just made 
+
 return <>
 
 {
@@ -199,7 +212,7 @@ return <>
     <button onClick ={ () => { setEmergency(true) } } >Emergency Only</button>
     <button onClick ={ () => { setEmergency(false) } } >Show All</button>
     </> 
-    : " "
+    : <button onClick={() => navigate("/ticket/create")}>Create Ticket</button> 
 }
 
 <h2>List of Tickets</h2>
