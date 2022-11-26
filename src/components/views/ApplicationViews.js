@@ -14,6 +14,7 @@
 
 import { Outlet, Route, Routes } from "react-router-dom" // don't know what "react-router-dom" is, figure out later
 import { TicketList } from "../tickets/TicketList" // importing the "TicketList" function from "TicketList.js" inside "tickets" folder
+import { TicketForm } from "../tickets/TicketForm" // importing the "TicketForm" function from "TicketForm.js" inside the "tickets" folder
 
 export const ApplicationViews = () => {
 	return (
@@ -28,6 +29,8 @@ export const ApplicationViews = () => {
             }>
 
                 <Route path="tickets" element={ <TicketList /> } />
+
+                <Route path="ticket/create" element={ <TicketForm /> } /> 
             </Route>
         </Routes>
     )
