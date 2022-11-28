@@ -43,3 +43,4 @@ export const TicketContainer = () => {
         <TicketList searchTermState={searchTerms}/> 
     </>
 }
+
