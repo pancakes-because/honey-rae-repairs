@@ -13,10 +13,12 @@
 // we do that with a <Route> component.
 
 import { Outlet, Route, Routes } from "react-router-dom" // don't know what "react-router-dom" is, figure out later
-import { TicketList } from "../tickets/TicketList" // importing the "TicketList" function from "TicketList.js" inside "tickets" folder
 import { TicketForm } from "../tickets/TicketForm" // importing the "TicketForm" function from "TicketForm.js" inside the "tickets" folder
-import { TicketSearch } from "../tickets/TicketSearch" // importing the "TicketSearch" functin from the "TicketSearch.js" inside the "tickets" folder
-import { TicketContainer } from "../tickets/TicketContainer"
+import { TicketContainer } from "../tickets/TicketContainer" // importing the "TicketContainer" function from "TicketForm.js" inside the "tickets" folder
+
+// *** don't need to import TicketList and TicketSearch since we're importing TicketCOntainer ***
+// import { TicketList } from "../tickets/TicketList" 
+// import { TicketSearch } from "../tickets/TicketSearch" 
 
 export const ApplicationViews = () => {
 	return (
@@ -59,4 +61,8 @@ export const ApplicationViews = () => {
 {/* this will make up the parent component that contains TicketSearch and TicketList, so they can share state */}
 {/* the parent is what lets them communicate with each other; react rule: child components get state from a parent component */}
 
-
+{/* now, we want to change our views */}
+{/* we want employees to see the TicketContainer view, which has the search field  */}
+{/* customers should only see the TicketList view, so NOT including the search field  */}
+// *** to do this, we're creating two new components to represent two new views *** 
+// *** these will be called "CustomerViews.js" and "Employee Views.js" *** 
