@@ -19,7 +19,14 @@ import "./Tickets.css" // importing from Tickets.css so we can apply the styles 
 
 /* updated code */ 
 
-export const TicketList = () => {
+// *** coming from TicketContainer.js *** 
+// we have a new search input field that employees can type search terms into and get a list of tickets that match
+// *** we're deconstructing the "searchTermsState" prop from TicketContainer.js *** 
+// *** reminder, this is the key. and the value is the actual state from the parent, the search terms themselves ***
+// *** so it is a state of this component; it's not the direct state variable, but it's inherited from the parent ***
+// we can also observe this! so we can have another useEffect here
+
+export const TicketList = ({ searchTermState }) => {
     const [tickets, setTickets] = useState([])
     const [filteredTickets, setFiltered] = useState([])
 
@@ -27,6 +34,11 @@ export const TicketList = () => {
     // "setEmergency" is the variable that changes the state, so only emergency tickets are shown when the "emergency only" button is clicked
     // by default, we don't want only the emergency tickets to show, so the default or initial state of emergency is "false"
     const [emergency, setEmergency] = useState(false)
+
+    // "onlyOnly" is the variable tracking the initial state of whether open tickets should be shown ONLY when the "open tickets" button is clicked
+    // "updateOpenOnly" is the setter function or variable that changes the state, so only open tickets are shown when the "open tickets" button is clicked
+    // by default, we don't want only the open tickets to show, so the default or initial state of openOnly is "false"
+    const [openOnly, updateOpenOnly] = useState(false)
 
     // navigate is a variable/"feature" tied to the "create ticket" button 
     // it is imported from react-router-dom; see import statement near top 
@@ -36,6 +48,26 @@ export const TicketList = () => {
 
     const localHoneyUser = localStorage.getItem("honey_user") 
     const honeyUserObject = JSON.parse(localHoneyUser)
+
+      // this useEffect() is for observing the state of the search input field we have for employees
+    // can have a console.log here just to check things out in your browser
+    // there, we can more easily see that TicketList is observing when the parent's searchTermState is changing
+    // now, the final step -- like the instructions in my call back function say -- anytime the searchTermsState changes, we want to filter the list of tickets again 
+    // for now, to keep it simple, the way we can think about this is, "does the ticket start with whatever the user typed in?" -- then show ticket results based on that
+    // so now we need another filter state variable
+    // *** this is filtering the original ticket list we had from the API; we're constantly modifying how we filter things *** 
+    // so, we end up having a new variable called "searchedTickets" that stores our logic saying that we want to filter our tickets and see if the description starts with whatever the user typed in
+    // this returns an array to us
+    // filteredTickets is the state we're displaying here, so that's the one to update. we can use setFilterd for that.
+
+    
+    useEffect(
+        () => {
+            const searchedTickets = tickets.filter(ticket => ticket.description.startsWith(searchTermState))
+            setFiltered(searchedTickets)
+        },
+        [searchTermState]
+    )
 
     // this useEffect()  only emergency tickets show when the "emergency only" button is clicked
     // it observes the state of emergency 
@@ -118,6 +150,30 @@ export const TicketList = () => {
             }
         },
         [tickets]
+    )
+
+    // this useEffect is observing the state of "openOnly", which will help us know when the "open tickets" button is clicked
+    // we have a call back function which will contain the instructions, () => {}
+    // we have an array that will observe "openOnly"
+    // now, we write in the logic 
+    // if "openOnly" is true, we filter down the tickets and update the filtered state variable - just like we did with setFiltered(myTickets) above
+    // but the condition is different, bc we want to filter the open tickets for the customer/user and any of their tickets that have an empty string for "dateCompleted" 
+    // we have a variable called "openTicketArray" to store this 
+
+    useEffect(
+        () => {
+            if (openOnly) {
+                const openTicketArray = tickets.filter(ticket => {
+                    return ticket.userId === honeyUserObject.id && ticket.dateCompleted === ""
+                })
+                setFiltered(openTicketArray)
+            } 
+            else {
+                const myTickets = tickets.filter(ticket => ticket.userId === honeyUserObject.id)
+                setFiltered(myTickets)
+            }
+        },
+        [openOnly]
     )
 
 /* original code */ 
@@ -204,15 +260,43 @@ export const TicketList = () => {
 // this will be a new page with a form that creates a ticket in the ticket list view; the form input fields are in "TicketForm.js"
 // after they fill out the form, they will be routed back to the ticket list to see the new ticket they just made 
 
+// now, we want to create a "open tickets" button that can ONLY be seen by customers 
+// this should show service tickets that don't have a "dateCompleted" value
+// so we create a fragment in th jsx to group this with the "create ticket" button
+// similar to employees, where we set a state variable and component for emergency and non-emergency tickets, we'll create another state variable for open and closed tickets.
+// the initial state variable is "openOnly" and the setter function to change the state is "updateOpenOnly"; see above 
+// down here in the jsx, we'll set updateOpenOnly to "true" when the button is clicked, so it shows open tickets like we want.
+// and because a state variable is changing when the button is clicked, we need to observe the state variable changing, so we need a useEffect() whose job it is is to observe state
+// we made the useEffect, so we're all set here! 
+
+// now, we want to create a "all my tickets" button to show all the customer's tickets and set the state variable back to false
+// so we add this in the jsx. reminder, only open tickets should be shown when updateOpenOnly is "true"
+// to see all tickets, we can set updateOpenOnly to "false"
+// now we go back and update the useEffect that was observing "updateOnly" with an else condition
+// reminder, we the "myTickets" variable is storing the customer's tickets, so we can use this with "setFiltered" to show that 
+// so we can steal some of the login from the first useEffect basically
+
+// now, we're going to share state between two components with props (which are like arguments to functions)
+// when there are two sibling components, they cannot share state. 
+// you have to make a parent component that contains both of them, and then both child components share state between them. 
+// we're going to do this with adding a search input field for tickets for employees ONLY. 
+// this will let the employee type in the description of ticket and receive a list of tickets matching what they typed in.
+// so we need to create a parent component containing both the input field and the list of tickets.
+// ***so create a new component or module called "TicketSearch.js"***
+
 return <>
 
 {
     honeyUserObject.staff 
     ? <>
-    <button onClick ={ () => { setEmergency(true) } } >Emergency Only</button>
-    <button onClick ={ () => { setEmergency(false) } } >Show All</button>
+        <button onClick ={ () => { setEmergency(true) } } >Emergency Only</button>
+        <button onClick ={ () => { setEmergency(false) } } >Show All</button>
     </> 
-    : <button onClick={() => navigate("/ticket/create")}>Create Ticket</button> 
+    : <>
+        <button onClick={() => navigate("/ticket/create")}>Create Ticket</button> 
+        <button onClick={() => { updateOpenOnly(true) } }>Open Tickets</button> 
+        <button onClick={() => { updateOpenOnly(false) } }>All My Tickets</button> 
+    </> 
 }
 
 <h2>List of Tickets</h2>

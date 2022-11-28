@@ -15,6 +15,8 @@
 import { Outlet, Route, Routes } from "react-router-dom" // don't know what "react-router-dom" is, figure out later
 import { TicketList } from "../tickets/TicketList" // importing the "TicketList" function from "TicketList.js" inside "tickets" folder
 import { TicketForm } from "../tickets/TicketForm" // importing the "TicketForm" function from "TicketForm.js" inside the "tickets" folder
+import { TicketSearch } from "../tickets/TicketSearch" // importing the "TicketSearch" functin from the "TicketSearch.js" inside the "tickets" folder
+import { TicketContainer } from "../tickets/TicketContainer"
 
 export const ApplicationViews = () => {
 	return (
@@ -28,10 +30,33 @@ export const ApplicationViews = () => {
                 </>
             }>
 
-                <Route path="tickets" element={ <TicketList /> } />
+                {/* original code  */}
+                {/* <Route path="tickets" element={ <TicketList /> } /> */}
+
+                {/* updated code */}
+                {/* this will be the parent component handling both the child TicketList and TicketSearch routes  */}
+
+                {/* <Route path="tickets" element={
+                    <>
+                        <TicketSearch /> 
+                        <TicketList /> 
+                    </>
+                }>  */}
+
+                {/* updated code  */}
+                {/* this route functions the same as above */}
+                {/* TicketContainer is holding TicketSearch and TicketList  */}
+                
+                <Route path="tickets" element={ <TicketContainer /> } /> 
 
                 <Route path="ticket/create" element={ <TicketForm /> } /> 
             </Route>
         </Routes>
     )
 }
+
+{/* *** making a new component called "TicketContainer.js" *** */}
+{/* this will make up the parent component that contains TicketSearch and TicketList, so they can share state */}
+{/* the parent is what lets them communicate with each other; react rule: child components get state from a parent component */}
+
+
