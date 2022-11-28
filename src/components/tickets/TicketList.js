@@ -19,7 +19,14 @@ import "./Tickets.css" // importing from Tickets.css so we can apply the styles 
 
 /* updated code */ 
 
-export const TicketList = () => {
+// *** coming from TicketContainer.js *** 
+// we have a new search input field that employees can type search terms into and get a list of tickets that match
+// *** we're deconstructing the "searchTermsState" prop from TicketContainer.js *** 
+// *** reminder, this is the key. and the value is the actual state from the parent, the search terms themselves ***
+// *** so it is a state of this component; it's not the direct state variable, but it's inherited from the parent ***
+// we can also observe this! so we can have another useEffect here
+
+export const TicketList = ({ searchTermState }) => {
     const [tickets, setTickets] = useState([])
     const [filteredTickets, setFiltered] = useState([])
 
@@ -41,6 +48,26 @@ export const TicketList = () => {
 
     const localHoneyUser = localStorage.getItem("honey_user") 
     const honeyUserObject = JSON.parse(localHoneyUser)
+
+      // this useEffect() is for observing the state of the search input field we have for employees
+    // can have a console.log here just to check things out in your browser
+    // there, we can more easily see that TicketList is observing when the parent's searchTermState is changing
+    // now, the final step -- like the instructions in my call back function say -- anytime the searchTermsState changes, we want to filter the list of tickets again 
+    // for now, to keep it simple, the way we can think about this is, "does the ticket start with whatever the user typed in?" -- then show ticket results based on that
+    // so now we need another filter state variable
+    // *** this is filtering the original ticket list we had from the API; we're constantly modifying how we filter things *** 
+    // so, we end up having a new variable called "searchedTickets" that stores our logic saying that we want to filter our tickets and see if the description starts with whatever the user typed in
+    // this returns an array to us
+    // filteredTickets is the state we're displaying here, so that's the one to update. we can use setFilterd for that.
+
+    
+    useEffect(
+        () => {
+            const searchedTickets = tickets.filter(ticket => ticket.description.startsWith(searchTermState))
+            setFiltered(searchedTickets)
+        },
+        [searchTermState]
+    )
 
     // this useEffect()  only emergency tickets show when the "emergency only" button is clicked
     // it observes the state of emergency 
@@ -248,6 +275,14 @@ export const TicketList = () => {
 // now we go back and update the useEffect that was observing "updateOnly" with an else condition
 // reminder, we the "myTickets" variable is storing the customer's tickets, so we can use this with "setFiltered" to show that 
 // so we can steal some of the login from the first useEffect basically
+
+// now, we're going to share state between two components with props (which are like arguments to functions)
+// when there are two sibling components, they cannot share state. 
+// you have to make a parent component that contains both of them, and then both child components share state between them. 
+// we're going to do this with adding a search input field for tickets for employees ONLY. 
+// this will let the employee type in the description of ticket and receive a list of tickets matching what they typed in.
+// so we need to create a parent component containing both the input field and the list of tickets.
+// ***so create a new component or module called "TicketSearch.js"***
 
 return <>
 
