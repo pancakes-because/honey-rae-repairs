@@ -5,6 +5,9 @@ import { Outlet, Route, Routes } from "react-router-dom" // don't know what "rea
 import { TicketForm } from "../tickets/TicketForm" // importing the "TicketForm" function from "TicketForm.js" inside the "tickets" folder
 import { TicketContainer } from "../tickets/TicketContainer" // importing the "TicketContainer" function from "TicketForm.js" inside the "tickets" folder
 
+// reminder, we want employees to see TicketContainer
+// BUT employees don't need to see the customer ticket form 
+// so we can take away their access for TicketForm
 
 export const EmployeeViews = () => {
 	return (
@@ -20,7 +23,9 @@ export const EmployeeViews = () => {
                 
                 <Route path="tickets" element={ <TicketContainer /> } /> 
 
-                <Route path="ticket/create" element={ <TicketForm /> } /> 
+                {/* employees don't need this */}
+                {/* <Route path="ticket/create" element={ <TicketForm /> } />  */} 
+
             </Route>
         </Routes>
     )

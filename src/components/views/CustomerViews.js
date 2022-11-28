@@ -5,6 +5,9 @@ import { Outlet, Route, Routes } from "react-router-dom" // don't know what "rea
 import { TicketForm } from "../tickets/TicketForm" // importing the "TicketForm" function from "TicketForm.js" inside the "tickets" folder
 import { TicketContainer } from "../tickets/TicketContainer" // importing the "TicketContainer" function from "TicketForm.js" inside the "tickets" folder
 
+// reminder, we do NOT want customers to see TicketContainer
+// we only want them to see the TicketList 
+// bc of this, we can replace TicketContainer with TicketList
 
 export const CustomerViews = () => {
 	return (
@@ -17,8 +20,11 @@ export const CustomerViews = () => {
                     <Outlet />
                 </>
             }>
-                
-                <Route path="tickets" element={ <TicketContainer /> } /> 
+                {/* original code  */}
+                {/* <Route path="tickets" element={ <TicketContainer /> } />  */}
+
+                {/* updated code */}
+                <Route path="tickets" element={ <TicketList /> } /> 
 
                 <Route path="ticket/create" element={ <TicketForm /> } /> 
             </Route>
