@@ -59,11 +59,15 @@ export const TicketList = ({ searchTermState }) => {
     // so, we end up having a new variable called "searchedTickets" that stores our logic saying that we want to filter our tickets and see if the description starts with whatever the user typed in
     // this returns an array to us
     // filteredTickets is the state we're displaying here, so that's the one to update. we can use setFilterd for that.
-
+    // now, in the browser, you can type in "Vero" and get the ticket whose description starts with "Vero"
+    // to have it so that lower case works in the search field also, like "sunt", we added to toLowerCase()
+    // so we're lower-casing both the description on the ticket object itself and the search terms
     
     useEffect(
         () => {
-            const searchedTickets = tickets.filter(ticket => ticket.description.startsWith(searchTermState))
+            const searchedTickets = tickets.filter(ticket => {
+                return ticket.description.toLowerCase().startsWith(searchTermState.toLowerCase())
+            })
             setFiltered(searchedTickets)
         },
         [searchTermState]
