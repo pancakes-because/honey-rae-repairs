@@ -58,3 +58,4 @@ export const Employee = ({ id, fullName, email }) => {
         <div>Email: {email}</div>
     </section>
 }
+
