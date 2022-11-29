@@ -84,7 +84,7 @@ export const EmployeeDetails = () => {
     // we also need optional chaining here because we're going two properties deep with employee.employeeTickets
     
     // now, we can move onto to some styling with the header and footer in Employees.css 
-    // adding a class name 
+    // adding a class name for footer and header, which matches with our css 
 
 
         return <section className="employee">
