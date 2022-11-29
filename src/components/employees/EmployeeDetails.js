@@ -37,8 +37,7 @@
 // so now we pop this into our fetch call, but the employeeId variable interpolated where the number would go for userId
 // so the array is what we're receiving back from API, so we'll capture that and name this "data"
 // the variable "singleEmployee" is extracting what we want from the array, so it's position 0
-// then we update our state with singleEmployee, our object, 
-
+// then we update our state with singleEmployee, our object 
 
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
@@ -46,7 +45,7 @@ import { useParams } from "react-router-dom"
 export const EmployeeDetails = () => {
     
     const { employeeId } = useParams()
-    const [ employee, updateEmployee ] = useState()
+    const [ employee, updateEmployee ] = useState({})
 
 
     useEffect(
@@ -61,6 +60,38 @@ export const EmployeeDetails = () => {
         },
         [employeeId]
     )
+
+    // now we can render the details for each employee in the jsx 
+    // in the header, we want to show the employee's name 
+    // on the employee object, we have to go to .user and then .fullName
+    // *** we know this by looking at the state in dev tools
+    // so we end up with employee.user.email 
+    // we can do the same thing for the email div to get employee.user.email
+    // for specialty and rate, these properties are directly on the employee object
+    // so i can just do employee.speciality and employee.rate
+    // then in the footer, I want to show how many tickets the employee is working on
+    // employeeTickets property is directly on the employee object, so we can do employee.employeeTickets
+
+    // *** react rule: it does not like accessing properties within properties ***
+    // we see this when errors are thrown for fullName and email
+    // *** we can bypass this with optional chaining *** 
+    // *** optional chaining is done with ? meaning that it will only go down this path if the properties exists ***
+    // *** make sure to include an empty object, {}, in our employee state *** 
+
+    // we still have some errors 
+    // employeeTickets is an array and underlying an array is an object 
+    // we want to display the length of the array, so we need the .length method 
+    // we also need optional chaining here because we're going two properties deep with employee.employeeTickets
     
-    return <></>
+    // now, we can move onto to some styling with the header and footer in Employees.css 
+    // adding a class name 
+
+
+        return <section className="employee">
+        <header className="employee__header">{employee?.user?.fullName}</header>
+        <div>Email: {employee?.user?.email}</div>
+        <div>Speciality: {employee.specialty}</div>
+        <div>Rate: {employee.rate}</div>
+        <footer className="employee__footer">Currently working on {employee?.employeeTickets?.length} tickets</footer>
+    </section>
 }
