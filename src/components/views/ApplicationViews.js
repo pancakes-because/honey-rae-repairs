@@ -33,7 +33,7 @@ import { EmployeeViews } from "./EmployeeViews"
 {/* we want employees to see the TicketContainer view, which has the search field  */}
 {/* customers should only see the TicketList view, so NOT including the search field  */}
 // *** to do this, we're creating two new components to represent two new views *** 
-// *** these will be called "CustomerViews.js" and "Employee Views.js" *** 
+// *** these will be called "CustomerViews.js" and "EmployeeViews.js" *** 
 
 /* BIG CHANGE: READ THIS */ 
 // we're going to modify <Outlet> and check if the user is an employee or customer 
