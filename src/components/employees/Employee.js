@@ -29,11 +29,32 @@
 
 /* updated code where key was removed */ 
 
+// export const Employee = ({ id, fullName, email }) => {
+
+//     return <section className="employee">
+//         <div>Name: {fullName}</div>
+//         <div>Email: {email}</div>
+//     </section>
+
+// }
+
+// now that we have useParams() set up in EmployeeDetails to extract the employee id 
+// we're going to use the name of the employee and make a link component 
+// we're taking the name of employee and hyperlinking it 
+// then change the route to "employees/"" and then whatever the primary key of that employee is 
+// so if we go to our employee list view in the browser, we can click on their names and be taken to a new page to see their details 
+// don't forget to import the link from react-router-dom
+
+/* updated code for link */ 
+
+import { Link } from "react-router-dom"
+
 export const Employee = ({ id, fullName, email }) => {
 
     return <section className="employee">
-        <div>Name: {fullName}</div>
+        <div>
+            <Link to={`/employees/${id}`}>Name: {fullName}</Link>
+        </div>
         <div>Email: {email}</div>
     </section>
-
 }
