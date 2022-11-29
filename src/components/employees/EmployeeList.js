@@ -3,6 +3,7 @@
 // customers cannot see this 
 
 import { useEffect, useState } from "react"
+import { Employee } from "./Employee"
 import "./Employees.css"
 
 // here's our plan... 
@@ -51,14 +52,52 @@ export const EmployeeList = () => {
         []
     )
 
+// to help us practice props more, we are going to create a child component for "EmployeeList"
+// the child component will be called "Employee". 
+// *** we're heading over to Employee.js component now *** 
+
+/* original code before Employee prop existed */ 
+
+//     return <article className="employees">
+//         {
+//             employees.map(employee => {
+//                 return <section className="employee" key={`employee--${employee.id}`}>
+//                     <div>Name: {employee.fullName}</div>
+//                     <div>Email: {employee.email}</div>
+//                 </section>
+//             })
+//         }
+//     </article>
+// } 
+
+/* updated code after Employee prop exists */ 
+
     return <article className="employees">
         {
-            employees.map(employee => {
-                return <section className="employee" key={`employee--${employee.id}`}>
-                    <div>Name: {employee.fullName}</div>
-                    <div>Email: {employee.email}</div>
-                </section>
-            })
+            // original code without key 
+            // employees.map(employee => <Employee id={employee.id} fullName={employee.fullName} email={employee.email} /> 
+
+            // updated code with key 
+            employees.map(employee => <Employee key={`employee--${employee.id}`}
+                id={employee.id} 
+                fullName={employee.fullName} 
+                email={employee.email} /> )
         }
     </article>
 } 
+
+// coming from EmployeeList.js 
+// so we're putting in the Employee component here 
+// we're also making the jsx render the props (id, fullName, email) related to Employee 
+// then we're putting the property information in (employee.id, employee.fullName, employee.email)
+// *** remember to import the "Employee" component here ***
+// *** make sure you go back to Employee.js and desconstruct the props ***
+
+// we deconstructed the props and passed them as object parameters in the Employee component 
+// now, we need to add a unique key to where employee is being rendered in EmployeeList 
+// *** now go back to the child component, Employee, and remove the key there ***
+
+// coming back from Employee.js 
+// now, that we've removed the key from Employee
+// *** to recap, we're building multiple components in EmployeeList which is rendering the Employee section for us. *** 
+// *** just a good example of an alternate way to use props; having one component render the details of another is good for scalability or anything that can get complex ***
