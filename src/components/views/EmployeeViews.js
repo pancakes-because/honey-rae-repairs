@@ -7,6 +7,8 @@ import { Outlet, Route, Routes } from "react-router-dom"
 import { TicketContainer } from "../tickets/TicketContainer" // importing the "TicketContainer" function from "TicketForm.js" inside the "tickets" folder
 import { EmployeeList } from "../employees/EmployeeList"
 import { EmployeeDetails } from "../employees/EmployeeDetails"
+import { CustomerList } from "../customers/CustomerList"
+import { CustomerDetails } from "../customers/CustomerDetails"
 
 // reminder, we want employees to see TicketContainer
 // BUT employees don't need to see the customer ticket form 
@@ -50,6 +52,11 @@ export const EmployeeViews = () => {
 
                 <Route path="employees" element={ <EmployeeList /> } />
                 <Route path="employees/:employeeId" element={ <EmployeeDetails /> } />
+
+                {/* information for customer nav link and customer details  */}
+
+                <Route path="customers" element={ <CustomerList /> } />
+                <Route path="customers/:customerId" element={ <CustomerDetails /> } />
             </Route>
         </Routes>
     )
