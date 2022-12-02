@@ -3,6 +3,7 @@
 
 // *** now, we go back to EmployeeViews.js *** 
 // there, we'll go to the route we made earlier and fill in the name as "Profile"
+// *** coming from "EmployeeForm.js" and "CustomerForm.js" 
 
 export const Profile = () => {
     
@@ -10,11 +11,11 @@ export const Profile = () => {
     const honeyUserObject = JSON.parse(localHoneyUser)
 
         if (honeyUserObject.staff) {
-            return <></>
+            return <EmployeeForm />
 
         } 
         else { 
-            return <></>
+            return <CustomerForm/>
 
         }
 }

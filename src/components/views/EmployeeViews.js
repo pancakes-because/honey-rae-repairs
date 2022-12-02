@@ -53,6 +53,8 @@ import { Profile } from "../profile/Profile"
 // *** coming back from Profile.js after making a component there *** 
 // renamed the route we made to "Profile" now, so it matches "Profile.js"
 // don't forget to import this above! 
+// so now, if someone clicks on the "Profile" link in the navbar, the component will render and the URL will become http://localhost:3000/profile
+// *** now, off to CustomerForm.js and EmployeeForm.js to make those components ***
 
 
 export const EmployeeViews = () => {
