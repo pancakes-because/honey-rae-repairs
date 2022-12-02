@@ -10,6 +10,11 @@ export const CustomerList = () => {
 
     const [customers, setCustomers] = useState([])
 
+
+// original fetch request: http://localhost:8088/users?isStaff=false 
+// need an _expand query in fetch query to get phone and address to display 
+// possible URL: http://localhost:8088/customers?_expand=user&isStaff=false
+
     useEffect(
         () => {
             fetch(`http://localhost:8088/users?isStaff=false`)

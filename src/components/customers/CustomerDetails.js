@@ -29,5 +29,3 @@ export const CustomerDetails = () => {
     <footer className="customer__footer">Currently lives at {customer?.address} </footer>
 </section>
 }
-
-// need an expand in fetch query to get phone and address to display 
