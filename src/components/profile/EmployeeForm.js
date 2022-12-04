@@ -106,6 +106,17 @@ export const EmployeeForm = () => {
     const localHoneyUser = localStorage.getItem("honey_user") 
     const honeyUserObject = JSON.parse(localHoneyUser)
 
+    // state variable for the feedback message 
+    const [feedback, setFeedback] = useState("")
+
+    // observer code for the feedback message 
+    useEffect(() => {
+        if (feedback !== "") {
+            // Clear feedback to make entire element disappear after 3 seconds
+            setTimeout(() => setFeedback(""), 3000);
+        }
+    }, [feedback])
+
     // TODO: Get employee profile info from API and update state
 
     useEffect(() => {
@@ -128,23 +139,47 @@ export const EmployeeForm = () => {
 
         */
 
-        return fetch(`http://localhost:8088/employees/${profile.id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(profile)
+        /* original code before chaining the promise code for the feedback message in PUT operation*/ 
+    //     return fetch(`http://localhost:8088/employees/${profile.id}`, {
+    //         method: "PUT",
+    //         headers: {
+    //             "Content-Type": "application/json"
+    //         },
+    //         body: JSON.stringify(profile)
+    //     })
+    //         .then(response => response.json())
+    //         .then(() => {
+    //             // Do nothing 
+    //         })
+    // }
+
+    /* updated code after chaining the promise code for the feedback message in PUT operation*/ 
+    return fetch(`http://localhost:8088/employees/${profile.id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(profile)
+    })
+        .then(response => response.json())
+        .then(() => {
+            setFeedback("Employee profile successfully saved")
         })
-            .then(response => response.json())
-            .then(() => {
-                // Do nothing 
-            })
-    }
+}
+
+    /* under fieldset, before the specialty input field, added code to make the employee receive a feedback message after they click "Save Profile*/ 
 
     return (
+
+
         <form className="profile">
             <h2 className="profile__title">New Service Ticket</h2>
             <fieldset>
+                
+                <div className={`${feedback.includes("Error") ? "error" : "feedback"} ${feedback === "" ? "invisible" : "visible"}`}>
+                    {feedback}
+                </div>
+
                 <div className="form-group">
                     <label htmlFor="specialty">Specialty:</label>
                     <input
