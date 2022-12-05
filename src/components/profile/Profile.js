@@ -5,8 +5,8 @@
 // there, we'll go to the route we made earlier and fill in the name as "Profile"
 // *** coming from "EmployeeForm.js" and "CustomerForm.js" 
 
-import { CustomerForm } from "./CustomerForm"
 import { EmployeeForm } from "./EmployeeForm"
+import { CustomerForm } from "./CustomerForm"
 
 export const Profile = () => {
     

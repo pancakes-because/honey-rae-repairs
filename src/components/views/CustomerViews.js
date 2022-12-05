@@ -4,6 +4,10 @@
 import { Outlet, Route, Routes } from "react-router-dom" // don't know what "react-router-dom" is, figure out later
 import { TicketForm } from "../tickets/TicketForm" // importing the "TicketForm" function from "TicketForm.js" inside the "tickets" folder
 import { TicketList } from "../tickets/TicketList"
+import { Profile } from "../profile/Profile"
+import { TicketEdit } from "../tickets/TicketEdit"
+
+// don't need this anymore... 
 import { TicketContainer } from "../tickets/TicketContainer" // importing the "TicketContainer" function from "TicketForm.js" inside the "tickets" folder
 
 // reminder, we do NOT want customers to see TicketContainer
@@ -20,7 +24,11 @@ export const CustomerViews = () => {
 
                     <Outlet />
                 </>
-            }>
+            }> 
+
+                 {/* creating this for the profile link/view  */}
+                <Route path="profile" element={ <Profile /> } />  
+
                 {/* original code  */}
                 {/* <Route path="tickets" element={ <TicketContainer /> } />  */}
 
@@ -28,6 +36,10 @@ export const CustomerViews = () => {
                 <Route path="tickets" element={ <TicketList /> } /> 
 
                 <Route path="ticket/create" element={ <TicketForm /> } /> 
+
+                {/* creating this to let customers edit their service tickets */}
+                {/* make sure to import TicketEdit above  */}
+                <Route path="tickets/:ticketId/edit" element={ <TicketEdit /> } /> 
             </Route>
         </Routes>
     )
