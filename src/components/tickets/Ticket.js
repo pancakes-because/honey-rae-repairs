@@ -76,6 +76,7 @@
 // so only if the assigned employee is not "null", meaning we've found a full employee object (bc again the whole point was to get the full name of the employee), we'll display the assigned employee's full name
 // otherwise, empty string and nothing happens 
 // so now the "claim" button renders when its supposed to and the employee's name shows when the ticket has been assigned
+// so, now we move on to making the "claim" buttno actually work; it just displays right now
 
 import { Link } from "react-router-dom" 
 
