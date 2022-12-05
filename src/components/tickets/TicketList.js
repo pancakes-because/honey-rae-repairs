@@ -16,6 +16,10 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom" // importing from react-router-dom, so navigate feature works for customer "create ticket" button
 import "./Tickets.css" // importing from Tickets.css so we can apply the styles to TicketList.css 
+import { Ticket } from "./Ticket"
+
+// don't need this anymore after Ticket.js exists 
+import { Link } from "react-router-dom" 
 
 /* updated code */ 
 
@@ -28,6 +32,10 @@ import "./Tickets.css" // importing from Tickets.css so we can apply the styles 
 
 export const TicketList = ({ searchTermState }) => {
     const [tickets, setTickets] = useState([])
+
+    // this is for the useEffect() that will help us fetch all the information for employees
+    const [employees, setEmployees] = useState([])
+
     const [filteredTickets, setFiltered] = useState([])
 
     // "emergency" is the variable tracking the initial state of whether emergency tickets shoudl be shown ONLY when the "emergency only" button is clicked
@@ -97,15 +105,26 @@ export const TicketList = ({ searchTermState }) => {
     )
 
     // this useEffect() is getting all of of the tickets from the database to begin with 
+    // *** to create the functionality for the "claim" button and employee assignment text, we have to update the original fetch URL here *** 
+    // original URL: http://localhost:8088/serviceTickets 
+    // updated URL: http://localhost:8088/serviceTickets?_embed=employeeTickets  
+    // now we're adding another fetch request within this useEffect()
+    // it will help us fetch all of the employee information
 
     useEffect(
         () => {
             // View the initial state of tickets
             // console.log("Initial state of tickets", tickets) 
-            fetch(`http://localhost:8088/serviceTickets`)
-            .then(response => response.json())
-            .then((ticketArray) => {
-                setTickets(ticketArray)
+            fetch(`http://localhost:8088/serviceTickets?_embed=employeeTickets`)
+                .then(response => response.json())
+                .then((ticketArray) => {
+                    setTickets(ticketArray)
+            })
+
+            fetch(`http://localhost:8088/employees?_expand=user`)
+                .then(response => response.json())
+                .then((employeeArray) => {
+                    setEmployees(employeeArray)
             })
 
         },
@@ -288,6 +307,50 @@ export const TicketList = ({ searchTermState }) => {
 // so we need to create a parent component containing both the input field and the list of tickets.
 // ***so create a new component or module called "TicketSearch.js"***
 
+// *** coming from TicketEdit.js *** 
+// now, we want the tickets to be editable 
+// TicketEdit.js is a component that handles this 
+// don't forget to import Link above to make this part work  
+// make sure to add a route to CustomerViews.js that will render the TicketEdit component  
+
+// *** coming from Ticket.js *** 
+// in the JSX, we use an implicit return and put "Ticket" here
+// then we create a prop called "ticketObject" whose value will be the current ticket 
+// reminder, "ticket" is the parameter for the callback function for .map
+// so as this iterates, it will create a brand new ticket component and the prop is going to be "ticketObject" for each one
+// so there will be multiple of these created 
+// *** and now we will deconstruct the prop in Ticket.js *** 
+// make sure to import Ticket in this component too 
+
+// now, we want to make sure that link ONLY renders if the user is a customer 
+// to do this, we could always copy/paste the local storage code from TicketList.js 
+// but we can also use props a little more 
+// so we can take "honeyUserObject" from local storage
+// and put this down in our JSX as a prop to help tell the individual ticket whether or not the user is an employee or customer
+// we'll call the prop "isStaff" and it's value will be "honeyUserObject.staff"
+// so the "isStaff" prop's value will be true or false bc of the "staff" property on honeyUserObject
+// so now go back to Ticket.js and deconstruct this prop
+
+// *** coming from Ticket.js *** 
+// we're adding in the logic to show the "claim" button or employee assignment text 
+// we made a URL that lets us grab this information 
+// now we update the original fetch request here with it; see the fetch request for more detail
+// so now each ticket has an employeeTickets property 
+// so we can use in the JSX of Ticket.js to conditional render the "claim" button or assignment text
+// *** back to Ticket.js for this **** 
+
+// *** coming from Ticket.js *** 
+// *** the JSON server has one limitation: the data tables have to be directly related; join tables are an issue *** 
+// so to get the employee names, we need to pull in all of the employees first by fetching them 
+// we'll make a new fetch request for this 
+// we can write this fetch request inside the useEffect() that runs after initial state is set
+// it also has all the information we need about permanent state from the API, so this is the perfect place; see the useEffect() for details 
+// we'll need another state variable for this, "employees" and "setEmployees"
+// *** now we would go back to Ticket.js to add the logic for getting the employee name ***
+// first, we'll make an "employees" array to pass as a prop to Ticket.js 
+// the prop will contain the "employees" state variable 
+// *** now, over to Ticket.js ***
+
 return <>
 
 {
@@ -303,7 +366,9 @@ return <>
     </> 
 }
 
-<h2>List of Tickets</h2>
+{/* original code before service tickets could be edited */}
+
+{/* <h2>List of Tickets</h2>
 
     <article className="tickets">
         {
@@ -317,5 +382,43 @@ return <>
             )
         }
     </article>
+</>  */}
+
+{/* updated code to make service tickets editable */}
+
+{/* original code before making TicketList a parent component and breaking out some of the functionality into Ticket.js, the child component  */}
+
+{/* <h2>List of Tickets</h2>
+
+<article className="tickets">
+    {
+        filteredTickets.map(
+            (ticket) => {
+                return <section className="ticket" key={`ticket--${ticket.id}`}>
+                    <header>
+                        <Link to={`/tickets/${ticket.id}/edit`}>Ticket {ticket.id}</Link>
+                    </header>
+                    <section>{ticket.description}</section>
+                    <footer>Emergency: {ticket.emergency ? "🧨" : "No"}</footer>
+                </section>
+            }
+        )
+    }
+</article>
+</>  */}
+
+{/* original code after making TicketList a parent component and breaking out some of the functionality into Ticket.js, the child component  */}
+
+<h2>List of Tickets</h2>
+
+<article className="tickets">
+    {
+        filteredTickets.map(
+            (ticket) => <Ticket employees={employees} isStaff={honeyUserObject.staff} ticketObject={ticket} /> 
+        )
+    }
+</article>
 </> 
 }
+
+
